@@ -38,12 +38,10 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String authHeader = webRequest.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new CustomException(ErrorCode.WRONG_HEADER_TOKEN);
+        Long memberId = (Long) webRequest.getAttribute("memberId", NativeWebRequest.SCOPE_REQUEST);
+        if (memberId == null) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
-        String token = authHeader.substring(7);
-        Long memberId = jwtProvider.getMemberId(token);
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
