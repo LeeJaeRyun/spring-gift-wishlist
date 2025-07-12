@@ -11,11 +11,11 @@ import java.sql.Statement;
 import java.util.*;
 
 @Repository
-public class itemRepositoryImpl implements ItemRepository {
+public class ItemRepositoryImpl implements ItemRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public itemRepositoryImpl(JdbcTemplate jdbcTemplate) {
+    public ItemRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
