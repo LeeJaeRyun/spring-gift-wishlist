@@ -10,6 +10,7 @@ import gift.wishlist.dto.WishResponse;
 import gift.wishlist.entity.Wishlist;
 import gift.wishlist.repository.WishlistRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class WishlistService {
         this.itemRepository = itemRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<WishResponse> getWishes(Member member) {
         return wishlistRepository.findByMember(member)
                 .stream()
@@ -37,6 +39,7 @@ public class WishlistService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void addWish(WishRequest request, Member member) {
         Item item = itemRepository.findById(request.itemId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
@@ -48,6 +51,7 @@ public class WishlistService {
         wishlistRepository.save(new Wishlist(member, item));
     }
 
+    @Transactional
     public void deleteWish(Long itemId, Member member) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ITEM_NOT_FOUND));
