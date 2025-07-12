@@ -19,13 +19,16 @@ public class WebConfig implements WebMvcConfigurer {
     private final LoginCheckInterceptor loginCheckInterceptor;
     private final JwtProvider jwtProvider;
     private final MemberRepository memberRepository;
+    private final LoginMemberArgumentResolver loginMemberArgumentResolver;
 
     public WebConfig(LoginCheckInterceptor loginCheckInterceptor,
                      JwtProvider jwtProvider,
-                     MemberRepository memberRepository) {
+                     MemberRepository memberRepository,
+                     LoginMemberArgumentResolver loginMemberArgumentResolver) {
         this.loginCheckInterceptor = loginCheckInterceptor;
         this.jwtProvider = jwtProvider;
         this.memberRepository = memberRepository;
+        this.loginMemberArgumentResolver = loginMemberArgumentResolver;
     }
 
     @Bean
@@ -46,6 +49,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new LoginMemberArgumentResolver(jwtProvider, memberRepository));
+        resolvers.add(loginMemberArgumentResolver);
     }
 }
